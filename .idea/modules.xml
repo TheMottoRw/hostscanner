@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../domainscanner/.idea/domainscanner.iml" filepath="$PROJECT_DIR$/../domainscanner/.idea/domainscanner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/hostscanner.iml" filepath="$PROJECT_DIR$/.idea/hostscanner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../scanner/.idea/scanner.iml" filepath="$PROJECT_DIR$/../scanner/.idea/scanner.iml" />
+    </modules>
+  </component>
+</project>

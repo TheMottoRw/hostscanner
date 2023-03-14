@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+    <title>Host scanner - Scanned hosts report </title>
+
+    <!-- Site favicon -->
+    <link rel="apple-touch-icon" sizes="180x180"
+          href="{{ url_for("static",filename="vendors/images/apple-touch-icon.png") }}">
+    <link rel="icon" type="image/png" sizes="32x32"
+          href="{{ url_for("static",filename="vendors/images/favicon-32x32.png") }}">
+    <link rel="icon" type="image/png" sizes="16x16"
+          href="{{ url_for("static",filename="vendors/images/favicon-16x16.png") }}">
+
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for("static",filename="vendors/styles/core.css") }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for("static",filename="vendors/styles/icon-font.min.css") }}">
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for("static",filename="src/plugins/datatables/css/dataTables.bootstrap4.min.css") }}">
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for("static",filename="src/plugins/datatables/css/responsive.bootstrap4.min.css") }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for("static",filename="vendors/styles/style.css") }}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    {#    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>#}
+    {#    <script>#}
+    {#        window.dataLayer = window.dataLayer || [];#}
+    {##}
+    {#        function gtag() {#}
+    {#            dataLayer.push(arguments);#}
+    {#        }#}
+    {##}
+    {#        gtag('js', new Date());#}
+    {##}
+    {#        gtag('config', 'UA-119386393-1');#}
+    {#    </script>#}
+</head>
+<body>
+{% include 'loader.html' %}
+{% include 'includes/header.html' %}
+{% include 'includes/sidebar-config.html' %}
+{% include 'includes/sidebar-menu.html' %}
+
+<div class="mobile-menu-overlay"></div>
+
+<div class="main-container">
+    <div class="pd-ltr-20 xs-pd-20-10">
+        <div class="min-height-200px">
+            <div class="page-header">
+                <div class="row">
+                    <div class="col-md-3 col-sm-12">
+                        <div class="title">
+                            <h4>Report</h4>
+                        </div>
+                        <nav aria-label="breadcrumb" role="navigation">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="#">Host scanner</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Scanned hosts</li>
+                            </ol>
+                        </nav>
+                    </div>
+                    <div class="col-md-9 col-sm-12 text-right">
+                        <form class="form form-inline" role="form">
+                            <div class="form-group">
+                                <label for="hosts">Hosts</label>&nbsp;&nbsp;&nbsp;
+                                <select name="hosts" id="hosts"
+                                        class="form-control">
+                                    <option value="All">All</option>
+                                </select>
+                            </div>
+                            <div class="form-group">&nbsp;&nbsp;&nbsp;
+                                <label for="status">Status</label>&nbsp;&nbsp;&nbsp;
+                                <select name="status" id="status"
+                                        class="form-control">
+                                    <option value="All">All</option>
+                                    <option value="Connected">Connected</option>
+                                    <option value="Disconnected">Disconnected</option>
+                                </select>
+                            </div>
+                            <div class="form-group">&nbsp;&nbsp;&nbsp;
+                                <label for="scan_date">Scan date</label>&nbsp;&nbsp;&nbsp;
+                                <input type="text" name="scan_date_range" id="scan_date_range"
+                                       class="form-control" readonly/>&nbsp;&nbsp;
+                                <button type="button" class="btn btn-primary btn-md mb-2" id="btnFilter">Filter</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Export Datatable start -->
+            <div class="card-box mb-30">
+                <div class="pd-20">
+                    <h4 class="text-blue h4">Export table into different files format</h4>
+                </div>
+                <div class="pb-20">
+                    <table id="table-hosts" class="table hover multiple-select-row data-table-export nowrap">
+                        <thead>
+                        <tr>
+                            <th class="table-plus"># Counts</th>
+                            <th class="table-plus datatable-nosort">Hostname</th>
+                            <th>IP</th>
+                            <th>Status</th>
+                            <th>Scan time</th>
+                        </tr>
+                        </thead>
+                        <tbody id="data-hosts">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Export Datatable End -->
+        </div>
+        {% include 'includes/footer.html' %}
+    </div>
+</div>
+<!-- js -->
+<script src="{{ url_for("static",filename="vendors/scripts/core.js") }}"></script>
+<script src="{{ url_for("static",filename="vendors/scripts/script.min.js") }}"></script>
+<script src="{{ url_for("static",filename="vendors/scripts/process.js") }}"></script>
+<script src="{{ url_for("static",filename="vendors/scripts/layout-settings.js") }}"></script>
+<script src="{{ url_for("static",filename="src/plugins/datatables/js/jquery.dataTables.min.js") }}"></script>
+<script src="{{ url_for("static",filename="src/plugins/datatables/js/dataTables.bootstrap4.min.js") }}"></script>
+<script src="{{ url_for("static",filename="src/plugins/datatables/js/dataTables.responsive.min.js") }}"></script>
+<script src="{{ url_for("static",filename="src/plugins/datatables/js/responsive.bootstrap4.min.js") }}"></script>
+<!-- buttons for Export datatable -->
+<script src="{{ url_for("static",filename="src/plugins/datatables/js/dataTables.buttons.min.js") }}"></script>
+<script src="{{ url_for("static",filename="src/plugins/datatables/js/buttons.bootstrap4.min.js") }}"></script>
+<script src="{{ url_for("static",filename="src/plugins/datatables/js/buttons.print.min.js") }}"></script>
+<script src="{{ url_for("static",filename="src/plugins/datatables/js/buttons.html5.min.js") }}"></script>
+<script src="{{ url_for("static",filename="src/plugins/datatables/js/buttons.flash.min.js") }}"></script>
+<script src="{{ url_for("static",filename="src/plugins/datatables/js/pdfmake.min.js") }}"></script>
+<script src="{{ url_for("static",filename="src/plugins/datatables/js/vfs_fonts.js") }}"></script>
+<!-- Date range picker-->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<!-- Datatable Setting js -->
+<script src="{{ url_for("static",filename="vendors/scripts/datatable-setting.js") }}"></script>
+<script src="{{ url_for("static",filename="helper/utils.js") }}"></script>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        isLoggedIn();
+        $(function () {
+            $('input[name="scan_date_range"]').daterangepicker({
+                "startDate": new Date(),
+                "endDate": new Date(),
+                opens: 'center',
+                locale: {
+                    format: 'YYYY/MM/DD'
+                }
+            });
+        });
+
+        function loadHosts() {
+            $.ajax({
+                url: "api/hosts",
+                method: 'GET',
+                data: {},
+                dataType: 'json',
+            }).done(function (data) {
+                datatable_configs.columns = [
+                    {"data": 'id'},
+                    {"data": 'hostname'},
+                    {"data": 'current_ip'},
+                    {"data": 'status'},
+                    {
+                        "data": 'scan_date',
+                        "render": function (data) {
+                            return formatDate(data.replaceAll(" GMT",""))
+                        }
+                    }]
+
+                datatable_configs.aaData = data;
+                $("#table-hosts").dataTable(datatable_configs)
+
+                //set filter
+                var res = "<option value='All'>All</option>";
+                for (var i = 0; i < data.length; i++) {
+                    res += `<option value=${data[i].id}>${data[i].hostname}</option>`;
+                }
+                $("#hosts").html(res);
+            })
+        }
+
+        function filterHosts() {
+            var host_id = $("#hosts").val(),
+                status = $("#status").val(),
+                date_arr = $("#scan_date_range").val().split(" - "),
+                start = date_arr[0],
+                end = date_arr[1],
+                params = {
+                    host_id: host_id,
+                    status: status,
+                    startdate: start,
+                    enddate: end,
+                };
+            $.ajax({
+                url: "api/hosts/filter",
+                method: 'GET',
+                data: params,
+                dataType: 'json',
+            }).done(function (data) {
+                $("#table-hosts").dataTable().fnDestroy()
+                // Reinitialize
+                datatable_configs.columns = [
+                    {"data": 'id'},
+                    {"data": 'hostname'},
+                    {"data": 'current_ip'},
+                    {"data": 'status'},
+                    {
+                        "data": 'scan_date',
+                        "render": function (data) {
+                            return formatDate(data)
+                        }
+                    }]
+
+                datatable_configs.aaData = data;
+                $("#table-hosts").dataTable(datatable_configs)
+            })
+        }
+
+        $("#btnFilter").click(function () {
+            filterHosts();
+        })
+        loadHosts();
+    })
+</script>

@@ -1,0 +1,11 @@
+<html>
+<body></body>
+</html>
+<script>
+    function logout(){
+        localStorage.removeItem("hostscanner_user_id");
+        localStorage.removeItem("hostscanner_user_email");
+        window.location="/login";
+    }
+    logout();
+</script>

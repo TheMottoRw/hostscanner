@@ -1,0 +1,28 @@
+Accessing database
+=========================
+
+1. Open command line
+2. mysql -u super -p [Super is a user who manages the database]
+3. [Press enter]
+4. use hostscanner;
+Some Useful commands in sql
+-----------------------------
+show tables [Displaying all tables of the database]
+desc users  [Showing details of the tables like columns and datatypes]
+select * from users [show all data in table users (this table can be changed to others like ip_groups,hosts....)]
+
+
+Running project
+---------------------
+1. Open command line
+2. cd Desktop/hostscanner
+3. source venv/bin/activate [Activating virtual environment which store libraries]
+4. python app.py
+
+Running scanner.py to keep scanning hosts connected and disconnected
+-----------------------------------------------------------------------
+1. Open command line
+2. cd Desktop/hostscanner
+3. source venv/bin/activate [Activating virtual environment which store libraries]
+4. python controllers/Scanner.py
+
